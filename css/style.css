@@ -1,0 +1,39 @@
+body{
+  text-align: center;
+}
+
+.container {
+  /*position: relative;
+  border: 1px solid red;*/
+
+  text-align: center;
+  margin-left: 125px;
+  width: 500px;
+  height: 233px;
+  background-color: black;
+  /*display: inline-block;*/
+}
+
+.box{
+  /*position: relative;*/
+  border: 1px solid red;
+  width: 108px;
+  height: 108px;
+  background-color: blue;
+  margin: 2px;
+  font-size: 124px;
+  color: transparent;
+  display: inline-block;
+}
+
+/*.box.clickX{
+  background: green;*/
+  background-image: url("x.png");
+  background-size: cover;
+}
+
+.box.clickO{
+  background: yellow;*/
+  background-image: url("o.jpg");
+  background-size: cover;
+}*/
