@@ -1,4 +1,4 @@
-body{
+body {
   text-align: center;
 }
 
@@ -14,26 +14,19 @@ body{
   /*display: inline-block;*/
 }
 
-.box{
+.box {
   /*position: relative;*/
   border: 1px solid red;
   width: 108px;
   height: 108px;
-  background-color: blue;
+  background-color: green;
   margin: 2px;
-  font-size: 124px;
-  color: transparent;
+  /*font-size: 124px;
+  color: transparent;*/
   display: inline-block;
 }
 
-/*.box.clickX{
-  background: green;*/
-  background-image: url("x.png");
+ #box0 {
+  /*background-image: url("1.jpg");*/
   background-size: cover;
 }
-
-.box.clickO{
-  background: yellow;*/
-  background-image: url("o.jpg");
-  background-size: cover;
-}*/
