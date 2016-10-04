@@ -2,7 +2,7 @@ $(document).ready(function () {
 
 
 // Global variables to control the game flow, remember the players' allocated cards
-// and array to compute help compute win/lose
+// and an points array for computing points to determine win/lose/draw
 var playerTurn = 1;
 var numberOfCardsGiven = 0;
 var cardsGivenPerPlayer = 0;
@@ -17,19 +17,20 @@ var cardStack = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
                   39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
                 ];
 
-var cardPoints = [ 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
-                  0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
-                  0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
-                  0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10
+var cardPoints = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10
                 ];
+
 
 // Event listeners for the 3 buttons
 $("#resetButton").on("click", reset);
 $("#hitButton").on("click", cardToBoardAndPlayer);
 $("#standButton").on("click", switchPlayerOrEnd);
 
-// To mark the start of the game through the alert below
-alert("It is player 1's turn.");
+// To mark the start of the game through the alert
+alert("It is player 1's turn. Pls click on the hit button.");
 
 
 
@@ -41,32 +42,7 @@ function checkWin() {
 
   $(".boxA").show();
 
-// Deal with double Ace or 10/J/Q/K plus A for the first 2 cards
-
-if (player1Cards.length == 2 || player2Cards.length == 2) {
-
-  for (var i=0; i<2; i++) {
-    // if (player1Cards[1] == 0 || player1Cards[1] == 13 || player1Cards[1] == 26 || player1Cards[1] == 39) {
-    //   var gotAce = 1;
-    // }
-
-
-  }
-
-      // console.log("player"+[i]+Cards1)
-      // if (player[i]Cards1 == )
-
-
-
-      console.log("xxxx")
-    }
-
-
-
-
-
-// Deal with Ace card points below
-
+  // Calculate the total points for both players
   for (var i=0; i<player1Cards.length; i++) {
     var onePoints = 0;
     // console.log(player1Cards.length);
@@ -88,9 +64,49 @@ if (player1Cards.length == 2 || player2Cards.length == 2) {
   }
 
 
-// Deal with >21 total points below
+  // Deal with double Ace or 10/J/Q/K plus A for the first 2 cards
+  if (player1Cards.length > 2) {
+    for (var i = 0; i < player1Cards.length; i++) {
+
+      if (player1Cards[i] == 0 || player1Cards[i] == 13 || player1Cards[i] == 26 || player1Cards[i] == 39) {
+        var gotAce = 1
+      }
+
+      if (gotAce == 1) {
+// fill in here
+      }
 
 
+    }
+  }
+
+
+
+
+  // Deal with the different win cases
+  if (player1Points > 21 && player2Points <= 21) {
+    alert('Player 1 has exceeded 21 points. Player 2 won.')
+  }
+
+  else if (player2Points > 21 && player1Points <= 21) {
+    alert('Player 2 has exceeded 21 points. Player 1 won.')
+  }
+
+  else if (player1Points > 21 && player2Points > 21) {
+    alert('Both players have exceeded 21 points. Draw.')
+  }
+
+  else if (player1Points == player2Points) {
+    alert('Both players have the same points. Draw.')
+  }
+
+  else if (player1Points > player2Points) {
+    alert('Player 1 won.')
+  }
+
+  else if (player1Points < player2Points) {
+    alert('Player 2 won.')
+  }
 
   alert("Pls reload game by pressing the reset button.");
 
@@ -218,7 +234,7 @@ function checkDuplicateCard() {
 
 
 
-// ***??? test duplication as the game proceed and ability to call checkDuplicateCard() again!!!
+// *** test duplication as the game proceed and ability to call checkDuplicateCard() again ***
   if (cardNumber !== cardStack[cardNumber] ) {
     console.log( "Card test loop if (ie. duplicate) " + cardStack[cardNumber] );
     checkDuplicateCard();
