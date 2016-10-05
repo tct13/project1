@@ -1,5 +1,11 @@
 body {
   text-align: center;
+  background-image: url("0.jpg");
+  background-size: cover;
+}
+
+h1{
+    font-size: 45px;
 }
 
 button {
@@ -13,8 +19,8 @@ button {
   border: 4px solid green;
   text-align: center;
   margin: auto;
-  width: 500px;
-  height: 292px;
+  width: 510px;
+  height: 343px;
   background-color: black;
   /*display: inline-block;*/
 }
@@ -22,8 +28,8 @@ button {
 .boxA, .boxB {
   /*position: relative;
   border: 1px solid red;*/
-  width: 108px;
-  height: 135px;
+  width: 120px;
+  height: 160px;
   margin-top: 6px;
   background-color: green;
   display: inline-block;
@@ -31,6 +37,6 @@ button {
 
  #box0, #box1, #box2, #box3, #box4, #box5, #box6,
  #box7, #box8, #box9, #box10, #box11, #box12, #box13 {
-  /*background-image: url("1.jpg");*/
+  /*background-image: url("0.jpg");*/
   background-size: cover;
 }

@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-
 // Global variables to control the game flow, remember the players' allocated cards
 // and an points array for computing points to determine win/lose/draw
 var playerTurn = 1;
@@ -39,8 +38,23 @@ function checkWin() {
 
   var player1Points = 0;
   var player2Points = 0;
+  var player1GotAce = 0;
+  var player2GotAce = 0;
+  var tempPlayer1Points = 0;
+  var tempPlayer2Points = 0;
 
   $(".boxA").show();
+
+
+
+// Below for testing outlier cases only - backjack and double aces not yet coded
+    // player1Cards = [13, 26];
+    // console.log("hhhhhhhh " + player1Cards);
+    //
+    // player2Cards = [13, 26];
+    // console.log("hhhhhhhh " + player2Cards);
+
+
 
   // Calculate the total points for both players
   for (var i=0; i<player1Cards.length; i++) {
@@ -63,63 +77,140 @@ function checkWin() {
     console.log("Player 2 total card points: " + player2Points);
   }
 
-
-  // Deal with double Ace or 10/J/Q/K plus A for the first 2 cards
-  if (player1Cards.length > 2) {
-    for (var i = 0; i < player1Cards.length; i++) {
-
-      if (player1Cards[i] == 0 || player1Cards[i] == 13 || player1Cards[i] == 26 || player1Cards[i] == 39) {
-        var gotAce = 1
+  // Determine the number of ace(s) each player has
+    player1GotAce = player1Cards.filter(
+      function(num) {
+        if (num == 0) { player1GotAce++ };
+        if (num == 13) { player1GotAce++ };
+        if (num == 26) { player1GotAce++ };
+        if (num == 39) { player1GotAce++ };
+        console.log("Player 1 number of aces: "+ player1GotAce);
       }
+    );
 
-      if (gotAce == 1) {
-// fill in here
+    player2GotAce = player2Cards.filter(
+      function(num) {
+        if (num == 0) { player2GotAce++ };
+        if (num == 13) { player2GotAce++ };
+        if (num == 26) { player2GotAce++ };
+        if (num == 39) { player2GotAce++ };
+        console.log("Player 2 Number of aces: "+ player2GotAce);
       }
+    );
 
-
+    // Deal with player 1 having 4, 2 or 1  aces
+    if (player1GotAce == 4 || player1GotAce <= 2) {
+        tempPlayer1Points = player1Points;
+        if (player1Points <= 21 ) {
+            tempPlayer1Points = tempPlayer1Points + 9;
+            console.log("Player 1 temp points: " + tempPlayer1Points);
+            if (tempPlayer1Points <= 21) {
+              player1Points = tempPlayer1Points;
+            }
+        }
+        console.log("Player 1 final points: " + player1Points);
+        tempPlayer1Points = 0;
     }
-  }
+
+    // Deal with player 2 having 4, 2 or 1 aces
+    if (player2GotAce == 4 || player2GotAce <= 2) {
+        tempPlayer2Points = player2Points;
+        if (player2Points <= 21 ) {
+            tempPlayer2Points = tempPlayer2Points + 9;
+            console.log("Player 2 temp points: " + tempPlayer2Points);
+            if (tempPlayer2Points <= 21) {
+              player2Points = tempPlayer2Points;
+            }
+        }
+        console.log("Player 2 final points: " + player2Points);
+        tempPlayer2Points = 0;
+    }
+
+    // Deal with player 1 having 3 aces
+    if (player1GotAce == 3) {
+        tempPlayer1Points = player1Points;
+
+        if (player1Points >= 4 ) {
+            tempPlayer1Points = tempPlayer1Points + 9;
+            console.log("Player 1 temp points: " + tempPlayer1Points);
+            if (tempPlayer1Points <= 21 ) {
+              player1Points = tempPlayer1Points;
+            }
+        }
+
+        if (player1Points <= 3 ) {
+            tempPlayer1Points = tempPlayer1Points + 18;
+            console.log("Player 1 temp points: " + tempPlayer1Points);
+            if (tempPlayer1Points <= 21 ) {
+              player1Points = tempPlayer1Points;
+            }
+        }
+
+        tempPlayer1Points = 0;
+    }
+
+    // Deal with player 2 having 3 aces
+    if (player2GotAce == 3) {
+        tempPlayer2Points = player2Points;
+
+        if (player2Points >= 4 ) {
+            tempPlayer2Points = tempPlayer2Points + 9;
+            console.log("Player 2 temp points: " + tempPlayer2Points);
+            if (tempPlayer2Points <= 21 ) {
+              player2Points = tempPlayer2Points;
+            }
+        }
+
+        if (player2Points <= 3 ) {
+            tempPlayer2Points = tempPlayer2Points + 18;
+            console.log("Player 2 temp points: " + tempPlayer2Points);
+            if (tempPlayer2Points <= 21 ) {
+              player2Points = tempPlayer2Points;
+            }
+        }
+
+        tempPlayer2Points = 0;
+    }
+
+
+
+
+
+
+
 
 
 
 
   // Deal with the different win cases
   if (player1Points > 21 && player2Points <= 21) {
-    alert('Player 1 has exceeded 21 points. Player 2 won.')
+    alert("Player 1 has exceeded 21 points. Player 2 won with " + player2Points + ".")
   }
 
   else if (player2Points > 21 && player1Points <= 21) {
-    alert('Player 2 has exceeded 21 points. Player 1 won.')
+    alert("Player 2 has exceeded 21 points. Player 1 won with " + player1Points + ".")
   }
 
   else if (player1Points > 21 && player2Points > 21) {
-    alert('Both players have exceeded 21 points. Draw.')
+    alert("Both players have exceeded 21 points.")
   }
 
   else if (player1Points == player2Points) {
-    alert('Both players have the same points. Draw.')
+    alert("Draw. Both players have the same points of " + player1Points + ".")
   }
 
   else if (player1Points > player2Points) {
-    alert('Player 1 won.')
+    alert("Player 1 won. Player 1 has " + player1Points + ", Player 2 has " + player2Points + ".")
   }
 
   else if (player1Points < player2Points) {
-    alert('Player 2 won.')
+    alert("Player 2 won. Player 1 has " + player1Points + ", Player 2 has " + player2Points + ".")
   }
 
   alert("Pls reload game by pressing the reset button.");
-
+  console.log("Player 1 final final card points: " + player1Points);
+  console.log("Player 2 final final card points: " + player2Points);
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -162,16 +253,6 @@ function switchPlayerOrEnd() {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 // To display the generated card to the board and remember the cards generated for each player
