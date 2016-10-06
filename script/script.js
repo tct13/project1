@@ -50,7 +50,6 @@ function checkWin() {
 // Below for testing outlier cases only - backjack and double aces not yet coded
     // player1Cards = [13, 26];
     // console.log("hhhhhhhh " + player1Cards);
-    //
     // player2Cards = [13, 26];
     // console.log("hhhhhhhh " + player2Cards);
 
@@ -77,6 +76,7 @@ function checkWin() {
     console.log("Player 2 total card points: " + player2Points);
   }
 
+
   // Determine the number of ace(s) each player has
     player1GotAce = player1Cards.filter(
       function(num) {
@@ -97,6 +97,20 @@ function checkWin() {
         console.log("Player 2 Number of aces: "+ player2GotAce);
       }
     );
+
+
+
+
+    if (player1GotAce == 2) {
+      console.log("Outlier special cases. BlackJack! Double Aces.")
+      alert("BlackJack! Double Aces.");
+      player1Points = player1Points + 10;
+    }
+
+
+
+
+
 
     // Deal with player 1 having 4, 2 or 1  aces
     if (player1GotAce == 4 || player1GotAce <= 2) {
@@ -182,6 +196,8 @@ function checkWin() {
 
 
 
+
+
   // Deal with the different win cases
   if (player1Points > 21 && player2Points <= 21) {
     alert("Player 1 has exceeded 21 points. Player 2 won with " + player2Points + ".")
@@ -210,6 +226,7 @@ function checkWin() {
   alert("Pls reload game by pressing the reset button.");
   console.log("Player 1 final final card points: " + player1Points);
   console.log("Player 2 final final card points: " + player2Points);
+  $("#hitButton").off();
 }
 
 
@@ -264,6 +281,7 @@ function cardToBoardAndPlayer() {
     console.log("Continue");
 
     var printCard = checkDuplicateCard();
+    console.log('this is printCard: ' + printCard)
 
     if (playerTurn == 1) {
       player1Cards.push(printCard);
@@ -311,14 +329,15 @@ function checkAllBoxesFilled(num) {
 // To check if card has been allocated or duplicated
 function checkDuplicateCard() {
   var cardNumber = generateCard();
-  // console.log(cardNumber);
+  console.log('this is currCardNumber: ' + cardNumber);
 
 
-
-// *** test duplication as the game proceed and ability to call checkDuplicateCard() again ***
+// Test duplicate card already allocated as the game progress and call checkDuplicateCard() again to re
   if (cardNumber !== cardStack[cardNumber] ) {
     console.log( "Card test loop if (ie. duplicate) " + cardStack[cardNumber] );
-    checkDuplicateCard();
+
+    // use return to solve the reversion/multi-threading issue (where this function will run to the end and return the duplicate card number)
+    return checkDuplicateCard();
   }
   else {
     // console.log( "Card test loop else " + cardStack[cardNumber] );
@@ -326,6 +345,9 @@ function checkDuplicateCard() {
     // console.log( "Card test loop else " + cardStack[cardNumber] );
     console.log(cardStack);
   }
+  console.log("CardNumber before final return: " + cardNumber);
+
+  // technically can solve the reversion/multi-threading issue by putting the return within else above
   return cardNumber;
 }
 
