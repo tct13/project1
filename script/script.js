@@ -40,165 +40,29 @@ function checkWin() {
   var player2Points = 0;
   var player1GotAce = 0;
   var player2GotAce = 0;
-  var tempPlayer1Points = 0;
-  var tempPlayer2Points = 0;
+
 
   $(".boxA").show();
 
 
-
-// Below for testing outlier cases only - backjack and double aces not yet coded
-    // player1Cards = [13, 26];
-    // console.log("hhhhhhhh " + player1Cards);
-    // player2Cards = [13, 26];
-    // console.log("hhhhhhhh " + player2Cards);
-
+// Below for testing outlier cases only - backjack and double aces
+  // player1Cards = [0, 48];
+  // console.log("hhhhhhhh " + player1Cards);
+  // player2Cards = [4, 18, 0, 39];
+  // console.log("hhhhhhhh " + player2Cards);
 
 
-  // Calculate the total points for both players
-  for (var i=0; i<player1Cards.length; i++) {
-    var onePoints = 0;
-    // console.log(player1Cards.length);
-    console.log("Player 1 card :" + player1Cards[i]);
-    onePoints = cardPoints[ player1Cards[i] ];
-    console.log("Player 1 card points: " + onePoints);
-    player1Points += onePoints;
-    console.log("Player 1 total card points: " + player1Points);
-  }
+  player1Points = calculateBasePoints(player1Cards);
+  player2Points = calculateBasePoints(player2Cards);
 
-  for (var j=0; j<player2Cards.length; j++) {
-    var twoPoints = 0;
-    // console.log(player2Cards.length);
-    console.log("Player 2 card :" + player2Cards[j]);
-    twoPoints = cardPoints[ player2Cards[j] ];
-    console.log("Player 2 card points: " + twoPoints);
-    player2Points += twoPoints;
-    console.log("Player 2 total card points: " + player2Points);
-  }
+  player1GotAce = gotAce(player1Cards);
+  player2GotAce = gotAce(player2Cards);
+
+  player1Points = calculateAcePoints(player1Points, player1GotAce, player1Cards);
+  player2Points = calculateAcePoints(player2Points, player2GotAce, player2Cards);
 
 
-  // Determine the number of ace(s) each player has
-    player1GotAce = player1Cards.filter(
-      function(num) {
-        if (num == 0) { player1GotAce++ };
-        if (num == 13) { player1GotAce++ };
-        if (num == 26) { player1GotAce++ };
-        if (num == 39) { player1GotAce++ };
-        console.log("Player 1 number of aces: "+ player1GotAce);
-      }
-    );
-
-    player2GotAce = player2Cards.filter(
-      function(num) {
-        if (num == 0) { player2GotAce++ };
-        if (num == 13) { player2GotAce++ };
-        if (num == 26) { player2GotAce++ };
-        if (num == 39) { player2GotAce++ };
-        console.log("Player 2 Number of aces: "+ player2GotAce);
-      }
-    );
-
-
-
-
-    if (player1GotAce == 2) {
-      console.log("Outlier special cases. BlackJack! Double Aces.")
-      alert("BlackJack! Double Aces.");
-      player1Points = player1Points + 10;
-    }
-
-
-
-
-
-
-    // Deal with player 1 having 4, 2 or 1  aces
-    if (player1GotAce == 4 || player1GotAce <= 2) {
-        tempPlayer1Points = player1Points;
-        if (player1Points <= 21 ) {
-            tempPlayer1Points = tempPlayer1Points + 9;
-            console.log("Player 1 temp points: " + tempPlayer1Points);
-            if (tempPlayer1Points <= 21) {
-              player1Points = tempPlayer1Points;
-            }
-        }
-        console.log("Player 1 final points: " + player1Points);
-        tempPlayer1Points = 0;
-    }
-
-    // Deal with player 2 having 4, 2 or 1 aces
-    if (player2GotAce == 4 || player2GotAce <= 2) {
-        tempPlayer2Points = player2Points;
-        if (player2Points <= 21 ) {
-            tempPlayer2Points = tempPlayer2Points + 9;
-            console.log("Player 2 temp points: " + tempPlayer2Points);
-            if (tempPlayer2Points <= 21) {
-              player2Points = tempPlayer2Points;
-            }
-        }
-        console.log("Player 2 final points: " + player2Points);
-        tempPlayer2Points = 0;
-    }
-
-    // Deal with player 1 having 3 aces
-    if (player1GotAce == 3) {
-        tempPlayer1Points = player1Points;
-
-        if (player1Points >= 4 ) {
-            tempPlayer1Points = tempPlayer1Points + 9;
-            console.log("Player 1 temp points: " + tempPlayer1Points);
-            if (tempPlayer1Points <= 21 ) {
-              player1Points = tempPlayer1Points;
-            }
-        }
-
-        if (player1Points <= 3 ) {
-            tempPlayer1Points = tempPlayer1Points + 18;
-            console.log("Player 1 temp points: " + tempPlayer1Points);
-            if (tempPlayer1Points <= 21 ) {
-              player1Points = tempPlayer1Points;
-            }
-        }
-
-        tempPlayer1Points = 0;
-    }
-
-    // Deal with player 2 having 3 aces
-    if (player2GotAce == 3) {
-        tempPlayer2Points = player2Points;
-
-        if (player2Points >= 4 ) {
-            tempPlayer2Points = tempPlayer2Points + 9;
-            console.log("Player 2 temp points: " + tempPlayer2Points);
-            if (tempPlayer2Points <= 21 ) {
-              player2Points = tempPlayer2Points;
-            }
-        }
-
-        if (player2Points <= 3 ) {
-            tempPlayer2Points = tempPlayer2Points + 18;
-            console.log("Player 2 temp points: " + tempPlayer2Points);
-            if (tempPlayer2Points <= 21 ) {
-              player2Points = tempPlayer2Points;
-            }
-        }
-
-        tempPlayer2Points = 0;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // Deal with the different win cases
+  // Show winning messages
   if (player1Points > 21 && player2Points <= 21) {
     alert("Player 1 has exceeded 21 points. Player 2 won with " + player2Points + ".")
   }
@@ -223,12 +87,233 @@ function checkWin() {
     alert("Player 2 won. Player 1 has " + player1Points + ", Player 2 has " + player2Points + ".")
   }
 
-  alert("Pls reload game by pressing the reset button.");
+  alert("Pls reload game by clicking the reset button.");
   console.log("Player 1 final final card points: " + player1Points);
   console.log("Player 2 final final card points: " + player2Points);
   $("#hitButton").off();
 }
 
+
+// Calculate the base points for both players
+function calculateBasePoints(playerCardsArray) {
+  var onePoints = 0;
+  var playerPoints = 0;
+
+  for (var i=0; i<playerCardsArray.length; i++) {
+    // console.log(playerCardsArray.length);
+    console.log("Player X card :" + playerCardsArray[i]);
+    onePoints = cardPoints[ playerCardsArray[i] ];
+    console.log("Player X card points: " + onePoints);
+    playerPoints = playerPoints + onePoints;
+    console.log("Player X total card points: " + playerPoints);
+  }
+  return playerPoints;
+
+// for (var i=0; i<player1Cards.length; i++) {
+//   var onePoints = 0;
+//   // console.log(player1Cards.length);
+//   console.log("Player 1 card :" + player1Cards[i]);
+//   onePoints = cardPoints[ player1Cards[i] ];
+//   console.log("Player 1 card points: " + onePoints);
+//   player1Points += onePoints;
+//   console.log("Player 1 total card points: " + player1Points);
+// }
+//
+// for (var j=0; j<player2Cards.length; j++) {
+//   var twoPoints = 0;
+//   // console.log(player2Cards.length);
+//   console.log("Player 2 card :" + player2Cards[j]);
+//   twoPoints = cardPoints[ player2Cards[j] ];
+//   console.log("Player 2 card points: " + twoPoints);
+//   player2Points += twoPoints;
+//   console.log("Player 2 total card points: " + player2Points);
+// }
+}
+
+// // Determine the number of ace(s) for each player
+function gotAce(playerCardsArray) {
+    var playerGotAce = 0;
+    playerCardsArray.forEach(
+      function(num) {
+        if (num == 0 || num == 13 || num == 26 || num == 39) {
+          playerGotAce++;
+        }
+      }
+    );
+    // console.log("Player " + playerTurn + " number of aces (playerGotAce): "+ playerGotAce);
+    // console.log(typeof(playerGotAce));
+    return playerGotAce;
+
+//   player1GotAce = player1Cards.filter(
+//     function(num) {
+//       if (num == 0) { player1GotAce++ }
+//       if (num == 13) { player1GotAce++ }
+//       if (num == 26) { player1GotAce++ }
+//       if (num == 39) { player1GotAce++ }
+//       console.log("Player 1 number of aces: "+ player1GotAce)
+//     }
+//   )
+//
+//   player2GotAce = player2Cards.filter(
+//     function(num) {
+//       if (num == 0) { player2GotAce++ }
+//       if (num == 13) { player2GotAce++ }
+//       if (num == 26) { player2GotAce++ }
+//       if (num == 39) { player2GotAce++ }
+//       console.log("Player 2 Number of aces: "+ player2GotAce)
+//     }
+//   )
+}
+
+
+// Deal with points relating to aces that each player has
+function calculateAcePoints (playerPoints, playerGotAce, playerCards) {
+
+    var tempPlayerPoints = 0;
+
+    // Deal with player having 4, 2 or 1  aces
+    if (playerGotAce == 4 || playerGotAce <= 2) {
+        tempPlayerPoints = playerPoints;
+        if (playerPoints <= 21 ) {
+            tempPlayerPoints = tempPlayerPoints + 9;
+            console.log("Player temp points: " + tempPlayerPoints);
+            if (tempPlayerPoints <= 21) {
+              playerPoints = tempPlayerPoints;
+            }
+        }
+        console.log("Player final points: " + playerPoints);
+        tempPlayerPoints = 0;
+    }
+
+      // Deal with player having 3 aces
+      if (playerGotAce == 3) {
+          tempPlayerPoints = playerPoints;
+
+          if (playerPoints >= 4 ) {
+              tempPlayerPoints = tempPlayerPoints + 9;
+              console.log("Player 1 temp points: " + tempPlayerPoints);
+              if (tempPlayerPoints <= 21 ) {
+                playerPoints = tempPlayerPoints;
+              }
+          }
+
+          if (playerPoints <= 3 ) {
+              tempPlayerPoints = tempPlayerPoints + 18;
+              console.log("Player temp points: " + tempPlayerPoints);
+              if (tempPlayerPoints <= 21 ) {
+                playerPoints = tempPlayerPoints;
+              }
+          }
+
+          tempPlayerPoints = 0;
+      }
+
+      // Deal with player 1 having 2 aces
+      if (playerGotAce == 2) {
+        if ( cardPoints[ playerCards[0] ] == 1 && cardPoints[ playerCards[1] ] == 1 ) {
+           console.log("Outlier case. BlackJack! Double Aces.")
+           alert("BlackJack! Double Aces.");
+           playerPoints = playerPoints + 10;
+         }
+       }
+
+       // Deal with player having an aces and 10/J/Q/K
+       if (playerGotAce == 1) {
+         if ( cardPoints[ playerCards[0] ] == 1 || cardPoints[ playerCards[1] ] == 1 ) {
+            if ( cardPoints[ playerCards[0] ] == 10 || cardPoints[ playerCards[1] ] == 10 ) {
+                console.log("Outlier case. BlackJack! One ace and 10/J/Q/K.")
+                alert("BlackJack! One ace and 10/J/Q/K.");
+                playerPoints = playerPoints + 1;
+            }
+          }
+        }
+
+       return playerPoints;
+// var tempPlayer1Points = 0;
+// var tempPlayer2Points = 0;
+//
+//   // Deal with player 1 having 4, 2 or 1  aces
+//   if (player1GotAce == 4 || player1GotAce <= 2) {
+//       tempPlayer1Points = player1Points;
+//       if (player1Points <= 21 ) {
+//           tempPlayer1Points = tempPlayer1Points + 9;
+//           console.log("Player 1 temp points: " + tempPlayer1Points);
+//           if (tempPlayer1Points <= 21) {
+//             player1Points = tempPlayer1Points;
+//           }
+//       }
+//       console.log("Player 1 final points: " + player1Points);
+//       tempPlayer1Points = 0;
+//   }
+//
+//   // Deal with player 2 having 4, 2 or 1 aces
+//   if (player2GotAce == 4 || player2GotAce <= 2) {
+//       tempPlayer2Points = player2Points;
+//       if (player2Points <= 21 ) {
+//           tempPlayer2Points = tempPlayer2Points + 9;
+//           console.log("Player 2 temp points: " + tempPlayer2Points);
+//           if (tempPlayer2Points <= 21) {
+//             player2Points = tempPlayer2Points;
+//           }
+//       }
+//       console.log("Player 2 final points: " + player2Points);
+//       tempPlayer2Points = 0;
+//   }
+//
+//   // Deal with player 1 having 3 aces
+//   if (player1GotAce == 3) {
+//       tempPlayer1Points = player1Points;
+//
+//       if (player1Points >= 4 ) {
+//           tempPlayer1Points = tempPlayer1Points + 9;
+//           console.log("Player 1 temp points: " + tempPlayer1Points);
+//           if (tempPlayer1Points <= 21 ) {
+//             player1Points = tempPlayer1Points;
+//           }
+//       }
+//
+//       if (player1Points <= 3 ) {
+//           tempPlayer1Points = tempPlayer1Points + 18;
+//           console.log("Player 1 temp points: " + tempPlayer1Points);
+//           if (tempPlayer1Points <= 21 ) {
+//             player1Points = tempPlayer1Points;
+//           }
+//       }
+//
+//       tempPlayer1Points = 0;
+//   }
+//
+//   // Deal with player 2 having 3 aces
+//   if (player2GotAce == 3) {
+//       tempPlayer2Points = player2Points;
+//
+//       if (player2Points >= 4 ) {
+//           tempPlayer2Points = tempPlayer2Points + 9;
+//           console.log("Player 2 temp points: " + tempPlayer2Points);
+//           if (tempPlayer2Points <= 21 ) {
+//             player2Points = tempPlayer2Points;
+//           }
+//       }
+//
+//       if (player2Points <= 3 ) {
+//           tempPlayer2Points = tempPlayer2Points + 18;
+//           console.log("Player 2 temp points: " + tempPlayer2Points);
+//           if (tempPlayer2Points <= 21 ) {
+//             player2Points = tempPlayer2Points;
+//           }
+//       }
+//
+//       tempPlayer2Points = 0;
+//   }
+//
+//   // Deal with player 1 having 2 aces
+//   if (player1GotAce == 2) {
+//       console.log("Outlier special cases. BlackJack! Double Aces.")
+//       alert("BlackJack! Double Aces.");
+//       player1Points = player1Points + 10;
+//   }
+
+}
 
 
 // To restart by reloading the webpage
